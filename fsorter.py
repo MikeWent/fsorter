@@ -24,8 +24,8 @@ filetypes = {
 args = argparse.ArgumentParser()
 args.add_argument("directory")
 args.add_argument("-t", "--test-run", help="just print what will be done", action="store_true")
-args.add_argument("-d", "--destination", help="directory in which the sorted files will be moved")
 args.add_argument("-i", "--include-hidden", help="include files with leading dot in the filename", action="store_true")
+args.add_argument("-d", "--destination", help="directory in which the sorted files will be moved", metavar="PATH")
 
 options = args.parse_args()
 working_dir = os.path.abspath(os.path.expanduser(options.directory))
