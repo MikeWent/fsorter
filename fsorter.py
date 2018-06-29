@@ -37,14 +37,14 @@ else:
     destination_dir = working_dir
 
 def get_file_type(filename):
-    """Get current_filename type by its name"""
+    """Get file type by its name"""
     file_extension = filename.lower().split(".")[-1]
     for some_type_extensions in filetypes.keys():
         if file_extension in some_type_extensions or file_extension == some_type_extensions:
             return filetypes[some_type_extensions]
 
 def get_file_size(filename):
-    """Get current_filename size in human-readable format (MB, GB, etc)"""
+    """Get file size in human-readable format (MB, GB, etc)"""
     size_in_bytes = os.stat(filename).st_size
     if size_in_bytes == 0:
         return "empty"
@@ -76,7 +76,7 @@ for current_filename in os.listdir(options.directory):
     except FileExistsError:
         pass
     final_destination = os.path.join(destination_dir, file_type, current_filename)
-    # Ask user if file already exists found
+    # Ask user if file already exists
     if os.path.isfile(final_destination) and (not options.force):
         final_file_relative_path = os.path.join(file_type, current_filename)
         message = "File '{}' ({}) already exists.\nOverwrite it with '{}' ({})? [y/N]: ".format(
@@ -90,7 +90,7 @@ for current_filename in os.listdir(options.directory):
         else:
             print("File skipped.")
             continue
-    # Move current_filename to corresponding folder
+    # Move file to corresponding folder
     try:
         os.rename(current_file_path, final_destination)
     except OSError as e:
