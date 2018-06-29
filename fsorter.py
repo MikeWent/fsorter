@@ -44,9 +44,8 @@ def get_file_type(filename):
     """Get file type by its name"""
     file_extension = filename.lower().split(".")[-1]
     for some_type_extensions in FILETYPES.keys():
-        if file_extension in some_type_extensions or file_extension == some_type_extensions:
+        if (file_extension in some_type_extensions) or (file_extension == some_type_extensions):
             return FILETYPES[some_type_extensions]
-        return None
 
 def get_file_size(filename):
     """Get file size in human-readable format (MB, GB, etc)"""
