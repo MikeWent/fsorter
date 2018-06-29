@@ -3,7 +3,7 @@ import argparse
 import math
 import os
 
-filetypes = {
+FILETYPES = {
     ("jpg", "png", "gif", "jpeg"): "Pictures",
     ("mp4", "mkv", "avi", "webm", "flv"): "Video",
     ("pdf", "doc", "docx", "pptx", "xlst", "odt", "csv", "txt", "md"): "Documents",
@@ -34,18 +34,19 @@ args.add_argument("-f", "--force", help="overwrite files if exist", action="stor
 args.add_argument("-d", "--destination", help="directory in which the sorted files will be moved", metavar="PATH")
 options = args.parse_args()
 
-working_dir = os.path.abspath(os.path.expanduser(options.directory))
+WORKING_DIR = os.path.abspath(os.path.expanduser(options.directory))
 if options.destination:
-    destination_dir = os.path.abspath(os.path.expanduser(options.destination))
+    DESTINATION_DIR = os.path.abspath(os.path.expanduser(options.destination))
 else:
-    destination_dir = working_dir
+    DESTINATION_DIR = WORKING_DIR
 
 def get_file_type(filename):
     """Get file type by its name"""
     file_extension = filename.lower().split(".")[-1]
-    for some_type_extensions in filetypes.keys():
+    for some_type_extensions in FILETYPES.keys():
         if file_extension in some_type_extensions or file_extension == some_type_extensions:
-            return filetypes[some_type_extensions]
+            return FILETYPES[some_type_extensions]
+        return None
 
 def get_file_size(filename):
     """Get file size in human-readable format (MB, GB, etc)"""
@@ -60,6 +61,7 @@ def get_file_size(filename):
 
 for current_filename in os.listdir(options.directory):
     current_file_path = os.path.abspath(os.path.join(options.directory, current_filename))
+    
     # Skip folders
     if not os.path.isfile(current_file_path):
         continue
@@ -71,15 +73,18 @@ for current_filename in os.listdir(options.directory):
     if not file_type:
         continue
     print(current_filename, "->", file_type)
+    
     # Break switch
     if options.test_run:
         continue
+
     # Create folder if doesn't exist
     try:
-        os.mkdir(os.path.join(destination_dir, file_type))
+        os.mkdir(os.path.join(DESTINATION_DIR, file_type))
     except FileExistsError:
         pass
-    final_destination = os.path.join(destination_dir, file_type, current_filename)
+    
+    final_destination = os.path.join(DESTINATION_DIR, file_type, current_filename)
     # Ask user if file already exists
     if os.path.isfile(final_destination) and (not options.force):
         final_file_relative_path = os.path.join(file_type, current_filename)
@@ -94,6 +99,7 @@ for current_filename in os.listdir(options.directory):
         else:
             print("File skipped.")
             continue
+
     # Move file to corresponding folder
     try:
         os.rename(current_file_path, final_destination)
