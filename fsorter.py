@@ -5,7 +5,7 @@ import os
 filetypes = {
     ("jpg", "png", "gif", "jpeg"): "Pictures",
     ("mp4", "mkv", "avi", "webm", "flv"): "Videos",
-    ("pdf", "doc", "docx", "pptx", "txt", "epub", "fb2", "md"): "Documents",
+    ("pdf", "doc", "docx", "pptx", "odt", "csv", "txt", "epub", "fb2", "md"): "Documents",
     ("zip", "tar", "7z", "xz", "gz", "bz", "tgz"): "Archives",
     ("mp3", "flac", "ogg", "wav", "m3u8", "pls"): "Music",
     ("json", "ini", "conf", "yaml", "toml", "xml"): "Configs",
