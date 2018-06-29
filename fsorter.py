@@ -59,21 +59,23 @@ def get_file_size(filename):
     s = round(size_in_bytes / p, 2)
     return "{} {}".format(s, size_name[i])
 
-for current_filename in os.listdir(options.directory):
-    current_file_path = os.path.abspath(os.path.join(options.directory, current_filename))
+for current_filename in os.listdir(WORKING_DIR):
+    current_file_path = os.path.abspath(os.path.join(WORKING_DIR, current_filename))
     
     # Skip folders
     if not os.path.isfile(current_file_path):
         continue
+
     # Skip hidden files by default
     if (not options.include_hidden) and current_filename[0] == ".": 
         continue
+
     file_type = get_file_type(current_filename)
     # Skip unknown file types
     if not file_type:
         continue
+
     print(current_filename, "->", file_type)
-    
     # Break switch
     if options.test_run:
         continue
