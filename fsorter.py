@@ -8,7 +8,7 @@ filetypes = {
     ("mp4", "mkv", "avi", "webm", "flv"): "Videos",
     ("pdf", "doc", "docx", "pptx", "xlst", "odt", "csv", "txt", "md"): "Documents",
     ("zip", "tar", "7z", "xz", "gz", "bz", "tgz"): "Archives",
-    ("mp3", "flac", "ogg", "wav", "m3u8", "pls"): "Music",
+    ("mp3", "flac", "ogg", "wav", "m3u8", "pls", "oga", "m4a"): "Music",
     ("epub", "fb2", "mobi"): "Books",
     ("json", "ini", "conf", "yaml", "toml", "xml"): "Configs",
     ("html", "htm", "mhtml", "css", "js"): "Web",
