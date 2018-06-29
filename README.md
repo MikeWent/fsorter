@@ -26,7 +26,7 @@ notes.txt -> Documents
 ## More info
 
 ```
-usage: fsorter.py [-h] [-t] [-i] [-d PATH] directory
+usage: fsorter.py [-h] [-t] [-i] [-f] [-d PATH] directory
 
 positional arguments:
   directory
@@ -35,6 +35,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -t, --test-run        just print what will be done
   -i, --include-hidden  include files with leading dot in the filename
+  -f, --force           overwrite files if exist
   -d PATH, --destination PATH
                         directory in which the sorted files will be moved
 ```
