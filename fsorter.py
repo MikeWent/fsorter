@@ -29,6 +29,17 @@ FILETYPES = {
     ("psd"): "Photoshop"
 }
 
+class color:
+    """Terminal ANSI color codes
+    
+    Full table: https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+    """
+    red = '\033[91m'
+    green = '\033[92m'
+    yellow = '\033[93m'
+    blue = '\033[94m'
+    default = '\033[0m'
+
 args = argparse.ArgumentParser()
 args.add_argument("directory")
 args.add_argument("-t", "--test-run", help="just print what will be done", action="store_true")
@@ -50,9 +61,9 @@ def get_file_type(filename):
         if (file_extension in some_type_extensions) or (file_extension == some_type_extensions):
             return FILETYPES[some_type_extensions]
 
-def get_file_size(filename):
+def get_file_size(path):
     """Get file size in human-readable format (MB, GB, etc)"""
-    size_in_bytes = os.stat(filename).st_size
+    size_in_bytes = os.stat(path).st_size
     if size_in_bytes == 0:
         return "empty"
     size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
@@ -60,6 +71,13 @@ def get_file_size(filename):
     p = math.pow(1024, i)
     s = round(size_in_bytes / p, 2)
     return "{} {}".format(s, size_name[i])
+
+if not os.path.isdir(DESTINATION_DIR) and options.destination:
+    print(color.red+"Error: destination directory doesn't exist: {}".format(DESTINATION_DIR)+color.default)
+    exit(1)
+if not os.path.isdir(WORKING_DIR):
+    print(color.red+"Error: directory doesn't exist: {}".format(WORKING_DIR)+color.default)
+    exit(1)
 
 for current_filename in os.listdir(WORKING_DIR):
     current_file_path = os.path.abspath(os.path.join(WORKING_DIR, current_filename))
@@ -77,7 +95,11 @@ for current_filename in os.listdir(WORKING_DIR):
     if not file_type:
         continue
 
-    print(current_filename, "->", file_type)
+    print("{filename} {size} -> {file_type}".format(
+        filename=current_filename,
+        size=color.blue+"("+get_file_size(current_file_path)+")"+color.default, 
+        file_type=color.green+file_type+color.default)
+    )
     # Break switch
     if options.test_run:
         continue
@@ -92,9 +114,9 @@ for current_filename in os.listdir(WORKING_DIR):
     # Ask user if file already exists
     if os.path.isfile(final_destination) and (not options.force):
         final_file_relative_path = os.path.join(file_type, current_filename)
-        message = "File '{}' ({}) already exists.\nOverwrite it with '{}' ({})? [y/N]: ".format(
-            final_file_relative_path, get_file_size(final_destination),
-            current_filename, get_file_size(current_file_path)
+        message = "File {final_destination} {d_size} already exists.\nOverwrite it? [y/N]: ".format(
+            final_destination=color.red+final_file_relative_path+color.default,
+            d_size=color.blue+"("+get_file_size(final_destination)+")"+color.default,
         )
         yn = input(message).lower()
         if yn == "y":
@@ -108,4 +130,4 @@ for current_filename in os.listdir(WORKING_DIR):
     try:
         os.rename(current_file_path, final_destination)
     except OSError as e:
-        print("Error: {}".format(e))
+        print(color.red+"Error: {}".format(e)+color.default)
