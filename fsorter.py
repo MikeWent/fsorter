@@ -5,12 +5,12 @@ import os
 
 FILETYPES = {
     ("jpg", "png", "gif", "jpeg"): "Pictures",
-    ("mp4", "mkv", "avi", "webm", "flv"): "Video",
+    ("mp4", "mkv", "avi", "webm", "flv", "srt"): "Video",
     ("pdf", "doc", "docx", "pptx", "xlst", "odt", "csv", "txt", "md"): "Documents",
     ("zip", "tar", "7z", "xz", "gz", "bz", "tgz"): "Archives",
     ("mp3", "flac", "ogg", "wav", "m3u8", "pls", "oga", "m4a"): "Music",
     ("epub", "fb2", "mobi"): "Books",
-    ("json", "ini", "conf", "yaml", "toml", "xml"): "Config",
+    ("json", "ini", "conf", "yaml", "toml", "xml", "ovpn"): "Config",
     ("html", "htm", "mhtml", "css", "js"): "Web",
     ("ttf", "otf", "woff2"): "Fonts",
     ("sh", "py", "rb", "pl", "php"): "Scripts",
@@ -18,12 +18,15 @@ FILETYPES = {
     ("bak", "bk", "backup"): "Backups",
     ("bin", "exe", "dll", "dat"): "Binaries",
     ("img", "iso"): "Images",
-    ("sql", "sqlite"): "Databases",
+    ("sql", "sqlite", "db"): "Databases",
     ("pub", "asc", "gpg"): "Keys",
     ("apk"): "Android",
     ("torrent"): "Torrent",
     ("log"): "Logs",
-    ("jar"): "Java"
+    ("jar"): "Java",
+    ("tdesktop-theme", "tdesktop-palette"): "Telegram Desktop themes",
+    ("attheme"): "Telegram Android themes",
+    ("psd"): "Photoshop"
 }
 
 args = argparse.ArgumentParser()
