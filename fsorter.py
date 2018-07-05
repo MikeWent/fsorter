@@ -72,26 +72,29 @@ def get_file_size(path):
     s = round(size_in_bytes / p, 2)
     return "{} {}".format(s, size_name[i])
 
-if not os.path.isdir(DESTINATION_DIR) and options.destination:
-    print(color.red+"Error: destination directory doesn't exist: {}".format(DESTINATION_DIR)+color.default)
-    exit(1)
-if not os.path.isdir(WORKING_DIR):
-    print(color.red+"Error: directory doesn't exist: {}".format(WORKING_DIR)+color.default)
+def error(error_text):
+    """Print text with "Error: " prefix and exit with code 1"""
+    print(color.red+"Error: "+str(error_text)+color.default)
     exit(1)
 
+if not os.path.isdir(DESTINATION_DIR) and options.destination:
+    error("destination directory doesn't exist: {}".format(DESTINATION_DIR))
+if not os.path.isdir(WORKING_DIR):
+    error("directory doesn't exist: {}".format(WORKING_DIR))
+
+
 for current_filename in os.listdir(WORKING_DIR):
+    # Get absolute file path
     current_file_path = os.path.abspath(os.path.join(WORKING_DIR, current_filename))
     
     # Skip folders
     if not os.path.isfile(current_file_path):
         continue
-
     # Skip hidden files by default
     if (not options.include_hidden) and current_filename[0] == ".": 
         continue
-
-    file_type = get_file_type(current_filename)
     # Skip unknown file types
+    file_type = get_file_type(current_filename)
     if not file_type:
         continue
 
@@ -130,4 +133,5 @@ for current_filename in os.listdir(WORKING_DIR):
     try:
         os.rename(current_file_path, final_destination)
     except OSError as e:
-        print(color.red+"Error: {}".format(e)+color.default)
+        error(e)
+
