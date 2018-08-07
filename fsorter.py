@@ -42,10 +42,11 @@ class color:
 
 args = argparse.ArgumentParser()
 args.add_argument("directory")
-args.add_argument("-t", "--test-run", help="just print what will be done", action="store_true")
-args.add_argument("-i", "--include-hidden", help="include files with leading dot in the filename", action="store_true")
-args.add_argument("-f", "--force", help="overwrite files if exist", action="store_true")
 args.add_argument("-d", "--destination", help="directory in which the sorted files will be moved", metavar="PATH")
+args.add_argument("-t", "--test-run", help="just print what will be done", action="store_true")
+args.add_argument("-f", "--force", help="overwrite files if exist", action="store_true")
+args.add_argument("-i", "--interactive", help="ask for an action (skip/overwrite) for every file conflict", action="store_true")
+args.add_argument("-n", "--include-hidden", help="include files with leading dot in the filename", action="store_true")
 options = args.parse_args()
 
 WORKING_DIR = os.path.abspath(os.path.expanduser(options.directory))
@@ -55,7 +56,7 @@ else:
     DESTINATION_DIR = WORKING_DIR
 
 def get_file_type(filename):
-    """Get file type by its name"""
+    """Get file type by its extension"""
     file_extension = filename.lower().split(".")[-1]
     for some_type_extensions in FILETYPES.keys():
         if (file_extension in some_type_extensions) or (file_extension == some_type_extensions):
@@ -114,19 +115,30 @@ for current_filename in os.listdir(WORKING_DIR):
         pass
     
     final_destination = os.path.join(DESTINATION_DIR, file_type, current_filename)
-    # Ask user if file already exists
-    if os.path.isfile(final_destination) and (not options.force):
+
+    if os.path.isfile(final_destination):
         final_file_relative_path = os.path.join(file_type, current_filename)
-        message = "File {final_destination} {d_size} already exists.\nOverwrite it? [y/N]: ".format(
-            final_destination=color.red+final_file_relative_path+color.default,
+        message = "{cr} Conflict:{cd} {final_destination} {d_size} already exists.".format(
+            cr=color.red,
+            cd=color.default,
+            final_destination=final_file_relative_path,
             d_size=color.blue+"("+get_file_size(final_destination)+")"+color.default,
         )
-        yn = input(message).lower()
-        if yn == "y":
-            print("Done.")
+        if options.interactive:
+            # Ask user for an action
+            print(message)
+            yn = input("{cy}  Overwrite it? [y/N]: {cd}".format(cy=color.yellow, cd=color.default)).lower()
+            if yn == "y":
+                print("   File has been overwritten.")
+                pass
+            else:
+                print("   File has been skipped.")
+                continue
+        elif options.force:
             pass
         else:
-            print("File skipped.")
+            print(message)
+            print("  File has been skipped. Use -f/--force or -i/--interactive")
             continue
 
     # Move file to corresponding folder
